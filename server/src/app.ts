@@ -4,8 +4,8 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import { CustomError } from './interfaces'
 
-class App {
-  public app: Application
+export class App {
+  private app: Application
 
   constructor() {
     this.app = express()
@@ -17,7 +17,7 @@ class App {
     this.app.use(cors())
     this.app.use(bodyParser.urlencoded({ extended: true, limit: '150mb' }))
 
-    this.app.get('/ping', (req, res: Response) => {
+    this.app.get('/ping', (_, res: Response) => {
       res.json({ message: 'Server is running' })
     })
 
@@ -42,11 +42,13 @@ class App {
     )
   }
 
-  public start(port: number) {
-    this.app.listen(port, () => {
-      console.log("<----------------------------------------->")
-      console.log(`🏃🏃🏃 Server is running on PORT ${port} 🏃🏃🏃`)
-      console.log("<----------------------------------------->")
+  public start(port: number | string) {
+    const PORT = parseInt(port as string)
+    this.app.listen(PORT, () => {
+      console.log('<----------------------------------------->')
+      // eslint-disable-next-line security-node/detect-crlf
+      console.log(`🏃🏃🏃 Server is running on PORT ${PORT} 🏃🏃🏃`)
+      console.log('<----------------------------------------->')
     })
   }
 }
