@@ -3,12 +3,16 @@ import helmet from 'helmet'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import { CustomError } from './interfaces'
+import { Routes } from './routes'
+import { ApiMethods } from './middlewares'
 
 export class App {
   private app: Application
+  private routes: Routes
 
   constructor() {
     this.app = express()
+    this.routes = new Routes()
     this.initializeMiddlewares()
   }
 
@@ -16,6 +20,8 @@ export class App {
     this.app.use(helmet())
     this.app.use(cors())
     this.app.use(bodyParser.urlencoded({ extended: true, limit: '150mb' }))
+
+    this.app.use('/api', ApiMethods, this.routes.router)
 
     this.app.get('/ping', (_, res: Response) => {
       res.json({ message: 'Server is running' })

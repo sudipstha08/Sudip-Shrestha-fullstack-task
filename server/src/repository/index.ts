@@ -1,1 +1,1 @@
-export const repo = 'repo'
+export * from './userRepository'

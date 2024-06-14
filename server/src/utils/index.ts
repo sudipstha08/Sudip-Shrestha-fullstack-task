@@ -1,1 +1,1 @@
-export const utils = 'util'
+export * from './winston'
