@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { prisma } from '../infrastructure'
 
 export class UserRepository {
-  async findUser(payload: Prisma.UserCreateInput) {
+  async findUser(payload: Prisma.UserWhereInput) {
     return await prisma.user.findFirst({
       where: payload,
     })

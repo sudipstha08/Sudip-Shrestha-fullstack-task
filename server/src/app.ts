@@ -4,7 +4,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import { CustomError } from './interfaces'
 import { Routes } from './routes'
-import { ApiMethods } from './middlewares'
+import { ApiMethods, RequestLog } from './middlewares'
 
 export class App {
   private app: Application
@@ -19,9 +19,14 @@ export class App {
   private initializeMiddlewares() {
     this.app.use(helmet())
     this.app.use(cors())
+    this.app.use(
+      express.json({
+        limit: '150mb',
+      }),
+    )
     this.app.use(bodyParser.urlencoded({ extended: true, limit: '150mb' }))
 
-    this.app.use('/api', ApiMethods, this.routes.router)
+    this.app.use('/api', RequestLog, ApiMethods, this.routes.router)
 
     this.app.get('/ping', (_, res: Response) => {
       res.json({ message: 'Server is running' })

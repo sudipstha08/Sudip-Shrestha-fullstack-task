@@ -1,6 +1,6 @@
+import { Request, Response } from 'express'
 import { Prisma } from '@prisma/client'
 import { UserRepository } from '../repository'
-import { Request, Response } from 'express'
 
 export class UserController {
   private userRepository: UserRepository
@@ -32,7 +32,7 @@ export class UserController {
       })
     } catch (error) {
       res.apiFail({
-        message: 'Failed to create clinic',
+        message: 'Failed to create user',
         error,
       })
     }

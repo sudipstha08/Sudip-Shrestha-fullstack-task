@@ -1,5 +1,7 @@
 import { Router } from 'express'
 import { UserController } from '../controllers'
+import { UserValidationSchema } from '../utils'
+import { Validate } from '../middlewares'
 
 export class UserRoutes {
   public userRouter: Router
@@ -14,6 +16,7 @@ export class UserRoutes {
   public initializeRoutes() {
     this.userRouter.post(
       '/',
+      Validate(UserValidationSchema),
       this.userController.createUser.bind(this.userController),
     )
   }

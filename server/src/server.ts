@@ -1,7 +1,9 @@
 import { App } from './app'
-import { config } from './infrastructure'
+import { checkDatabaseConnection, config } from './infrastructure'
 
 const app = new App()
+
+checkDatabaseConnection()
 
 // Starting the server
 app.start(config.port)

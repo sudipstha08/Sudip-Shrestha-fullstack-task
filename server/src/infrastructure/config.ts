@@ -12,4 +12,5 @@ const loadFromEnv = (key: string): string => {
 
 export const config = {
   port: loadFromEnv('PORT'),
+  jwtSecret: loadFromEnv('JWT_SECRET'),
 }
