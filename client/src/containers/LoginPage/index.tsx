@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { Link } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
-import { SESSION_KEY } from '@/constants'
+import { CURRENT_USER, SESSION_KEY } from '@/constants'
 import { User } from '@/interfaces'
 import { userService } from '@/services'
 import { VALIDATION_SCHEMA, saveItemToLocalStorage } from '@/utils'
@@ -24,6 +24,7 @@ const LoginPageComponent: FC = () => {
     mutationFn: userService.login,
     onSuccess: async data => {
       saveItemToLocalStorage(SESSION_KEY, data?.token)
+      saveItemToLocalStorage(CURRENT_USER, data?.user)
       toast.success('Logged in successfully')
       authStore.setLoggedIn()
     },
