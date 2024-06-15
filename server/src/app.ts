@@ -5,14 +5,17 @@ import bodyParser from 'body-parser'
 import { CustomError } from './interfaces'
 import { Routes } from './routes'
 import { ApiMethods, RequestLog } from './middlewares'
+import { Server } from 'http'
 
 export class App {
   private app: Application
   private routes: Routes
+  public server: Server
 
   constructor() {
     this.app = express()
     this.routes = new Routes()
+    this.server = new Server()
     this.initializeMiddlewares()
   }
 
@@ -55,7 +58,7 @@ export class App {
 
   public start(port: number | string) {
     const PORT = parseInt(port as string)
-    this.app.listen(PORT, () => {
+    this.server = this.app.listen(PORT, () => {
       console.log('<----------------------------------------->')
       // eslint-disable-next-line security-node/detect-crlf
       console.log(`🏃🏃🏃 Server is running on PORT ${PORT} 🏃🏃🏃`)

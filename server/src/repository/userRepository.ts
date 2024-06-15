@@ -5,6 +5,13 @@ export class UserRepository {
   async findUser(payload: Prisma.UserWhereInput) {
     return await prisma.user.findFirst({
       where: payload,
+      select: {
+        id: true,
+        username: true,
+        password: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     })
   }
 

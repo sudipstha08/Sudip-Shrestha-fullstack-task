@@ -19,5 +19,10 @@ export class UserRoutes {
       Validate(UserValidationSchema),
       this.userController.createUser.bind(this.userController),
     )
+    this.userRouter.post(
+      '/login',
+      Validate(UserValidationSchema),
+      this.userController.loginUser.bind(this.userController),
+    )
   }
 }
