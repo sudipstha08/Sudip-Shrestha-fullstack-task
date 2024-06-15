@@ -2,21 +2,34 @@ import express, { Application, NextFunction, Request, Response } from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import bodyParser from 'body-parser'
+import { Server, ServerOptions } from 'socket.io'
+import { createServer, Server as HttpServer } from 'http'
 import { CustomError } from './interfaces'
 import { Routes } from './routes'
 import { ApiMethods, RequestLog } from './middlewares'
-import { Server } from 'http'
+import { SocketRoutes } from './routes/socketRoutes'
 
 export class App {
   private app: Application
   private routes: Routes
+  private socketRoutes: SocketRoutes
+  private httpServer: HttpServer
   public server: Server
+  public serverOptions: ServerOptions
 
   constructor() {
     this.app = express()
     this.routes = new Routes()
-    this.server = new Server()
+    this.socketRoutes = new SocketRoutes()
     this.initializeMiddlewares()
+    this.initSocket()
+    this.serverOptions = {
+      cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+        credentials: true,
+      },
+    } as ServerOptions
   }
 
   private initializeMiddlewares() {
@@ -56,13 +69,23 @@ export class App {
     )
   }
 
+  private initSocket() {
+    this.httpServer = createServer(this.app)
+    this.server = new Server(this.httpServer, this.serverOptions)
+  }
+
   public start(port: number | string) {
     const PORT = parseInt(port as string)
-    this.server = this.app.listen(PORT, () => {
+    this.httpServer.listen(PORT, () => {
       console.log('<----------------------------------------->')
       // eslint-disable-next-line security-node/detect-crlf
-      console.log(`🏃🏃🏃 Server is running on PORT ${PORT} 🏃🏃🏃`)
+      console.log(`🏃🏃🏃 Server is running on PORT ${port} 🏃🏃🏃`)
       console.log('<----------------------------------------->')
     })
+
+    this.server.on(
+      'connection',
+      this.socketRoutes.onConnection.bind(this.socketRoutes),
+    )
   }
 }
