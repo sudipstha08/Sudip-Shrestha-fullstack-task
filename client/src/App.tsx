@@ -2,7 +2,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { queryClient } from '@/lib'
-import { HomePage, NotFoundPage, LoginPage } from '@/containers'
+import { HomePage, NotFoundPage, LoginPage, SignupPage } from '@/containers'
 import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 
@@ -23,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/sign-up" element={<SignupPage />} />
         <Route element={<NotFoundPage />} path="*" />
       </Routes>
     </QueryClientProvider>

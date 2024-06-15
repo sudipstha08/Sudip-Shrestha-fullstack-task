@@ -2,43 +2,42 @@ import { FC } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
-import { SESSION_KEY } from '@/constants'
 import { User } from '@/interfaces'
 import { userService } from '@/services'
-import { VALIDATION_SCHEMA, saveItemToLocalStorage } from '@/utils'
-import { authStore } from '@/store'
+import { VALIDATION_SCHEMA } from '@/utils'
 
-export type LoginDto = z.infer<typeof VALIDATION_SCHEMA.login>
+export type SignUpDto = z.infer<typeof VALIDATION_SCHEMA.login>
 
-export const LoginPage: FC = () => {
+export const SignupPage: FC = () => {
+  const navigate = useNavigate()
+
   const initialValues: Partial<User> = {
     username: '',
     password: '',
   }
 
-  const { mutate: login, isPending } = useMutation({
-    mutationFn: userService.login,
-    onSuccess: async data => {
-      saveItemToLocalStorage(SESSION_KEY, data?.token)
-      toast.success('Logged in successfully')
-      authStore.setLoggedIn()
+  const { mutate: signupUser, isPending } = useMutation({
+    mutationFn: userService.signUp,
+    onSuccess: async () => {
+      toast.success('Signed up successfully')
+      navigate('/login')
     },
     onError: ({ error }: { error: { message: string } }) => {
       toast.error(error.message)
     },
   })
 
-  const { control, handleSubmit } = useForm<LoginDto>({
+  const { control, handleSubmit } = useForm<SignUpDto>({
     defaultValues: initialValues,
     mode: 'all',
     resolver: zodResolver(VALIDATION_SCHEMA.login),
   })
 
-  const onSubmit = (data: LoginDto) => {
-    login({ ...data })
+  const onSubmit = (data: SignUpDto) => {
+    signupUser({ ...data })
   }
 
   return (
@@ -138,16 +137,16 @@ export const LoginPage: FC = () => {
                     ></path>
                   </svg>
                 ) : (
-                  'Sign in'
+                  'Sign Up'
                 )}
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Don’t have an account yet?{' '}
+                Already have an account ?{' '}
                 <Link
-                  to="/sign-up"
+                  to="/login"
                   className="font-medium text-primary-600 hover:underline dark:text-green-300"
                 >
-                  Sign up
+                  Login
                 </Link>
               </p>
             </form>
