@@ -1,1 +1,1 @@
-export const store = 'store'
+export * from './authStore'
