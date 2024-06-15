@@ -1,9 +1,8 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
-import { config } from '@/utils'
+import { config, removeItemFromLocalStorage } from '@/utils'
+import { SESSION_KEY } from '@/constants'
+import { authStore } from '@/store'
 
-/**
- * Create Axios instance with custom config
- */
 export const API: AxiosInstance = axios.create({
   baseURL: config.API_URL,
   headers: {
@@ -11,9 +10,6 @@ export const API: AxiosInstance = axios.create({
   },
 })
 
-/**
- *  Request interceptor
- * */
 API.interceptors.request.use(
   async axiosConfig => {
     return axiosConfig
@@ -21,17 +17,19 @@ API.interceptors.request.use(
   (error: AxiosError) => Promise.reject(error),
 )
 
-/**
- * Response interceptor
- **/
 API.interceptors.response.use(
   (response: AxiosResponse) => {
     return response.data
   },
   async error => {
+    if (error?.response?.data?.status?.code === 401) {
+      removeItemFromLocalStorage(SESSION_KEY)
+      authStore.setUser(null)
+      authStore.setLogout()
+    }
     return Promise.reject({
       message: 'Error occured',
-      ...error,
+      ...error?.response?.data,
     })
   },
 )
