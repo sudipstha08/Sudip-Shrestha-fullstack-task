@@ -1,12 +1,26 @@
-import express, { Request, Response } from 'express';
+import { App } from './app'
+import { checkDatabaseConnection, config, prisma } from './infrastructure'
 
-const app = express();
-const port = process.env.PORT || 3000;
+const app = new App()
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, world!');
-});
+checkDatabaseConnection()
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+// Starting the server
+app.start(config.port)
+
+const shutdown = async () => {
+  try {
+    await prisma.$disconnect()
+    console.log('<-------Prisma disconnected--------->')
+    app.server.close(() => {
+      console.log('Server closed')
+      process.exit(0)
+    })
+  } catch (err) {
+    console.error('<-------Error during shutdown----->', err)
+    process.exit(1)
+  }
+}
+
+process.on('SIGTERM', shutdown)
+process.on('SIGINT', shutdown)

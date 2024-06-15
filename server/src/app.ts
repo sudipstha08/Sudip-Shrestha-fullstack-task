@@ -3,21 +3,35 @@ import helmet from 'helmet'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import { CustomError } from './interfaces'
+import { Routes } from './routes'
+import { ApiMethods, RequestLog } from './middlewares'
+import { Server } from 'http'
 
-class App {
-  public app: Application
+export class App {
+  private app: Application
+  private routes: Routes
+  public server: Server
 
   constructor() {
     this.app = express()
+    this.routes = new Routes()
+    this.server = new Server()
     this.initializeMiddlewares()
   }
 
   private initializeMiddlewares() {
     this.app.use(helmet())
     this.app.use(cors())
+    this.app.use(
+      express.json({
+        limit: '150mb',
+      }),
+    )
     this.app.use(bodyParser.urlencoded({ extended: true, limit: '150mb' }))
 
-    this.app.get('/ping', (req, res: Response) => {
+    this.app.use('/api', RequestLog, ApiMethods, this.routes.router)
+
+    this.app.get('/ping', (_, res: Response) => {
       res.json({ message: 'Server is running' })
     })
 
@@ -42,11 +56,13 @@ class App {
     )
   }
 
-  public start(port: number) {
-    this.app.listen(port, () => {
-      console.log("<----------------------------------------->")
-      console.log(`🏃🏃🏃 Server is running on PORT ${port} 🏃🏃🏃`)
-      console.log("<----------------------------------------->")
+  public start(port: number | string) {
+    const PORT = parseInt(port as string)
+    this.server = this.app.listen(PORT, () => {
+      console.log('<----------------------------------------->')
+      // eslint-disable-next-line security-node/detect-crlf
+      console.log(`🏃🏃🏃 Server is running on PORT ${PORT} 🏃🏃🏃`)
+      console.log('<----------------------------------------->')
     })
   }
 }

@@ -1,1 +1,1 @@
-export const controller = 'controller'
+export * from './userController'
