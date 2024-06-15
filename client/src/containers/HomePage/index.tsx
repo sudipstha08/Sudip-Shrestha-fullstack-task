@@ -1,9 +1,9 @@
 import { FC } from 'react'
 import reactLogo from '../../assets/react.svg'
 import viteLogo from '/vite.svg'
-import { Button } from '@/components'
+import { Button, PrivateRoute } from '@/components'
 
-export const HomePage: FC = () => {
+const HomePageComponent: FC = () => {
   return (
     <main
       style={{
@@ -27,3 +27,5 @@ export const HomePage: FC = () => {
     </main>
   )
 }
+
+export const HomePage = PrivateRoute(HomePageComponent)

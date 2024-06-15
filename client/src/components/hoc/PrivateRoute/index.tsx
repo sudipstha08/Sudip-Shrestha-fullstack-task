@@ -13,7 +13,7 @@ export const PrivateRoute = (AuthComponent: ComponentType) => {
     const navigate = useNavigate()
     const { loggedIn, tokenFetching } = useSnapshot(authStore)
 
-    if (!loggedIn && !tokenFetching && !token) {
+    if (!loggedIn && !token) {
       navigate('/login')
     }
 

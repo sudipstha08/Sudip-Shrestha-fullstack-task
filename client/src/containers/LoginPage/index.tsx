@@ -10,10 +10,11 @@ import { User } from '@/interfaces'
 import { userService } from '@/services'
 import { VALIDATION_SCHEMA, saveItemToLocalStorage } from '@/utils'
 import { authStore } from '@/store'
+import { PublicRoute } from '@/components'
 
 export type LoginDto = z.infer<typeof VALIDATION_SCHEMA.login>
 
-export const LoginPage: FC = () => {
+const LoginPageComponent: FC = () => {
   const initialValues: Partial<User> = {
     username: '',
     password: '',
@@ -157,3 +158,5 @@ export const LoginPage: FC = () => {
     </section>
   )
 }
+
+export const LoginPage = PublicRoute(LoginPageComponent)

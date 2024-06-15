@@ -8,10 +8,11 @@ import { Controller, useForm } from 'react-hook-form'
 import { User } from '@/interfaces'
 import { userService } from '@/services'
 import { VALIDATION_SCHEMA } from '@/utils'
+import { PublicRoute } from '@/components'
 
 export type SignUpDto = z.infer<typeof VALIDATION_SCHEMA.login>
 
-export const SignupPage: FC = () => {
+const SignupPageComponent: FC = () => {
   const navigate = useNavigate()
 
   const initialValues: Partial<User> = {
@@ -156,3 +157,5 @@ export const SignupPage: FC = () => {
     </section>
   )
 }
+
+export const SignupPage = PublicRoute(SignupPageComponent)
