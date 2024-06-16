@@ -3,10 +3,10 @@ import { User, IAuthStore } from '../interfaces'
 
 export const authStore = proxy<IAuthStore>({
   loggedIn: false,
-  dbUser: null,
+  user: null,
   tokenFetching: false,
   setUser(user: User | null) {
-    this.dbUser = user
+    this.user = user
   },
   setLoggedIn() {
     this.loggedIn = true
