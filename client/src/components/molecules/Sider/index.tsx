@@ -7,7 +7,6 @@ import { useSnapshot } from 'valtio'
 
 const picSources = [
   'https://picsum.photos/200',
-  'https://picsum.photos/200',
   'https://randomuser.me/api/portraits/women/2.jpg',
   'https://randomuser.me/api/portraits/women/4.jpg',
   'https://randomuser.me/api/portraits/man/4.jpg',

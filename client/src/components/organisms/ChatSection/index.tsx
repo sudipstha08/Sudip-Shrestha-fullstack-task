@@ -81,7 +81,11 @@ export const ChatSection: FC = () => {
               <div className="flex items-center mb-2">
                 <img
                   className="w-8 h-8 rounded-full mr-2"
-                  src="https://picsum.photos/200/300"
+                  src={
+                    message.senderUsername == user?.username
+                      ? 'https://picsum.photos/200/300'
+                      : 'https://randomuser.me/api/portraits/man/4.jpg'
+                  }
                   alt="User1 avatar"
                   height={32}
                   width={32}
