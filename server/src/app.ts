@@ -3,7 +3,7 @@ import helmet from 'helmet'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import { Server, ServerOptions } from 'socket.io'
-import { createServer, Server as HttpServer } from 'http'
+import { createServer } from 'http'
 import { CustomError } from './interfaces'
 import { Routes } from './routes'
 import { ApiMethods, RequestLog } from './middlewares'
@@ -13,7 +13,6 @@ export class App {
   private app: Application
   private routes: Routes
   private socketRoutes: SocketRoutes
-  private httpServer: HttpServer
   public server: Server
   public serverOptions: ServerOptions
 
@@ -27,14 +26,20 @@ export class App {
       cors: {
         origin: '*',
         methods: ['GET', 'POST'],
-        credentials: true,
+        // credentials: true,
       },
     } as ServerOptions
   }
 
   private initializeMiddlewares() {
     this.app.use(helmet())
-    this.app.use(cors())
+    this.app.use(
+      cors({
+        origin: '*',
+        methods: ['GET', 'POST'],
+        credentials: true,
+      }),
+    )
     this.app.use(
       express.json({
         limit: '150mb',
@@ -70,22 +75,31 @@ export class App {
   }
 
   private initSocket() {
-    this.httpServer = createServer(this.app)
-    this.server = new Server(this.httpServer, this.serverOptions)
+    const httpServer = createServer(this.app)
+    this.server = new Server(httpServer, this.serverOptions)
+    httpServer.listen(9000, () => {
+      console.log('Started =====>')
+    })
   }
 
-  public start(port: number | string) {
-    const PORT = parseInt(port as string)
-    this.httpServer.listen(PORT, () => {
-      console.log('<----------------------------------------->')
-      // eslint-disable-next-line security-node/detect-crlf
-      console.log(`🏃🏃🏃 Server is running on PORT ${port} 🏃🏃🏃`)
-      console.log('<----------------------------------------->')
-    })
-
+  public runSocket() {
     this.server.on(
       'connection',
       this.socketRoutes.onConnection.bind(this.socketRoutes),
     )
   }
+  // public start(port: number | string) {
+  //   const PORT = parseInt(port as string)
+  //   this.httpServer.listen(PORT, () => {
+  //     console.log('<----------------------------------------->')
+  //     // eslint-disable-next-line security-node/detect-crlf
+  //     console.log(`🏃🏃🏃 Server is running on PORT ${port} 🏃🏃🏃`)
+  //     console.log('<----------------------------------------->')
+  //   })
+
+  //   this.server.on(
+  //     'connection',
+  //     this.socketRoutes.onConnection.bind(this.socketRoutes),
+  //   )
+  // }
 }

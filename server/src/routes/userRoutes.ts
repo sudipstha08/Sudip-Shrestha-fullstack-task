@@ -24,5 +24,9 @@ export class UserRoutes {
       Validate(UserValidationSchema),
       this.userController.loginUser.bind(this.userController),
     )
+    this.userRouter.get(
+      '/',
+      this.userController.fetchUsers.bind(this.userController),
+    )
   }
 }

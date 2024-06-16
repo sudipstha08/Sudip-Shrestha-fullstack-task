@@ -1,4 +1,4 @@
-import React, { ComponentType, ReactNode } from 'react'
+import React, { ComponentType, ReactNode, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useSnapshot } from 'valtio'
 import { authStore } from '@/store'
@@ -13,9 +13,11 @@ export const PrivateRoute = (AuthComponent: ComponentType) => {
     const navigate = useNavigate()
     const { loggedIn, tokenFetching } = useSnapshot(authStore)
 
-    if (!loggedIn && !token) {
-      navigate('/login')
-    }
+    useEffect(() => {
+      if (!loggedIn && !token) {
+        navigate('/login')
+      }
+    }, [loggedIn, navigate])
 
     if (tokenFetching) {
       return <Loader />
