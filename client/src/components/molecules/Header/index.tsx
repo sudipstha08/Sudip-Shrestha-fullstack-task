@@ -2,19 +2,22 @@ import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CURRENT_USER, SESSION_KEY } from '@/constants'
 import { authStore } from '@/store'
-import { getItemFromLocalStorage, removeItemFromLocalStorage } from '@/utils'
-
-const currentUser = getItemFromLocalStorage(CURRENT_USER) as {
-  username: string
-}
+import { removeItemFromLocalStorage } from '@/utils'
+import { useSnapshot } from 'valtio'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const Header: FC = () => {
   const navigate = useNavigate()
+  const { user } = useSnapshot(authStore)
+  const queryClient = useQueryClient()
 
   const handleLogout = () => {
     removeItemFromLocalStorage(SESSION_KEY)
+    removeItemFromLocalStorage(CURRENT_USER)
     navigate('/login')
+    authStore.setUser(null)
     authStore.setLogout()
+    queryClient.clear()
   }
 
   return (
@@ -30,7 +33,7 @@ export const Header: FC = () => {
         <h1 className="text-xl font-semibold">Chat Application</h1>
       </div>
       <div className="flex items-center">
-        <p className="mr-4 font-semibold">@{currentUser?.username}</p>
+        <p className="mr-4 font-semibold">@{user?.username}</p>
         <button
           type="button"
           onClick={handleLogout}

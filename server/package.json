@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start-dev": "ts-node-dev --no-notify --respawn  --transpile-only --exit-child --clear ./src/server.ts",
-    "start": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "start": "ts-node --transpile-only ./src/server.ts",
     "migrate-dev": "prisma migrate dev",
     "lint-staged": "lint-staged",
     "format": "eslint -c .eslintrc.js --ignore-path .eslintignore --fix",
@@ -22,6 +22,7 @@
     "express": "^4.19.2",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.7.5",
     "uuid": "^10.0.0",
     "winston": "^3.13.0",
     "zod": "^3.23.8"

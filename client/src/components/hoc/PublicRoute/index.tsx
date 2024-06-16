@@ -1,4 +1,4 @@
-import React, { ComponentType, ReactNode } from 'react'
+import React, { ComponentType, ReactNode, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { Loader } from '@/components'
 import { authStore } from 'src/store'
@@ -9,11 +9,13 @@ export const PublicRoute = (PublicComponent: ComponentType) => {
     const { loggedIn } = useSnapshot(authStore)
     const navigate = useNavigate()
 
-    if (loggedIn) {
-      navigate('/')
-    } else {
-      authStore.setLogout()
-    }
+    useEffect(() => {
+      if (loggedIn) {
+        navigate('/')
+      } else {
+        authStore.setLogout()
+      }
+    }, [loggedIn, navigate])
 
     if (loggedIn) {
       return <Loader />

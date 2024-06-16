@@ -2,11 +2,12 @@ export interface User {
   id: string
   username: string
   password: string
+  token?: string
 }
 
 export interface IAuthStore {
   loggedIn: boolean
-  dbUser: User | null
+  user: User | null
   tokenFetching: boolean
   setLoggedIn: () => void
   setLogout: () => void

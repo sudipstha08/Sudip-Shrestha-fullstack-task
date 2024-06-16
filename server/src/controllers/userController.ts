@@ -40,6 +40,26 @@ export class UserController {
     }
   }
 
+  public async fetchUsers(_: Request, res: Response) {
+    try {
+      const payload: Prisma.UserWhereInput = {
+        deletedAt: null,
+      }
+
+      const users = await this.userRepository.fetchUsers(payload)
+
+      res.apiSuccess({
+        message: 'User fetched successfully',
+        data: users,
+      })
+    } catch (error) {
+      res.apiFail({
+        message: 'Failed to fetch users',
+        error,
+      })
+    }
+  }
+
   public async loginUser(req: Request, res: Response) {
     try {
       const { username, password } = req.body

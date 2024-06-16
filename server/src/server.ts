@@ -1,12 +1,12 @@
 import { App } from './app'
-import { checkDatabaseConnection, config, prisma } from './infrastructure'
+import { checkDatabaseConnection, prisma } from './infrastructure'
 
 const app = new App()
 
 checkDatabaseConnection()
 
 // Starting the server
-app.start(config.port)
+app.runSocket()
 
 const shutdown = async () => {
   try {

@@ -1,4 +1,4 @@
-import { MutationFunction } from '@tanstack/react-query'
+import { MutationFunction, QueryFunction } from '@tanstack/react-query'
 import { LoginDto, SignUpDto } from '@/containers'
 import { User } from '@/interfaces'
 import { API } from '@/lib'
@@ -24,7 +24,13 @@ const signUp: MutationFunction<
   return data
 }
 
+const fetchUsers: QueryFunction<User[]> = async _context => {
+  const { data } = await API.get('/users')
+  return data
+}
+
 export const userService = {
   login,
   signUp,
+  fetchUsers,
 }

@@ -2,26 +2,45 @@ import express, { Application, NextFunction, Request, Response } from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import bodyParser from 'body-parser'
+import { Server, ServerOptions } from 'socket.io'
+import { createServer } from 'http'
 import { CustomError } from './interfaces'
 import { Routes } from './routes'
 import { ApiMethods, RequestLog } from './middlewares'
-import { Server } from 'http'
+import { SocketRoutes } from './routes/socketRoutes'
+import { config } from './infrastructure'
 
 export class App {
   private app: Application
   private routes: Routes
+  private socketRoutes: SocketRoutes
   public server: Server
+  public serverOptions: ServerOptions
 
   constructor() {
     this.app = express()
     this.routes = new Routes()
-    this.server = new Server()
+    this.socketRoutes = new SocketRoutes()
     this.initializeMiddlewares()
+    this.initSocket()
+    this.serverOptions = {
+      cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+        // credentials: true,
+      },
+    } as ServerOptions
   }
 
   private initializeMiddlewares() {
     this.app.use(helmet())
-    this.app.use(cors())
+    this.app.use(
+      cors({
+        origin: '*',
+        methods: ['GET', 'POST'],
+        credentials: true,
+      }),
+    )
     this.app.use(
       express.json({
         limit: '150mb',
@@ -56,13 +75,18 @@ export class App {
     )
   }
 
-  public start(port: number | string) {
-    const PORT = parseInt(port as string)
-    this.server = this.app.listen(PORT, () => {
-      console.log('<----------------------------------------->')
-      // eslint-disable-next-line security-node/detect-crlf
-      console.log(`🏃🏃🏃 Server is running on PORT ${PORT} 🏃🏃🏃`)
-      console.log('<----------------------------------------->')
+  private initSocket() {
+    const httpServer = createServer(this.app)
+    this.server = new Server(httpServer, this.serverOptions)
+    httpServer.listen(config.port, () => {
+      console.log('Started =====>')
     })
+  }
+
+  public runSocket() {
+    this.server.on(
+      'connection',
+      this.socketRoutes.onConnection.bind(this.socketRoutes),
+    )
   }
 }
