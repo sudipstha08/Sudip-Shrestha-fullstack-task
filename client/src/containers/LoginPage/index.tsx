@@ -26,6 +26,7 @@ const LoginPageComponent: FC = () => {
       saveItemToLocalStorage(SESSION_KEY, data?.token)
       saveItemToLocalStorage(CURRENT_USER, data?.user)
       toast.success('Logged in successfully')
+      authStore.setUser(data?.user)
       authStore.setLoggedIn()
     },
     onError: ({ error }: { error: { message: string } }) => {

@@ -76,6 +76,7 @@ export const ChatSection: FC = () => {
         <div className="px-4 py-2">
           {messages.map(message => (
             <div
+              key={message.id}
               className={`flex flex-col ${message.senderUsername === user?.username ? 'items-end' : 'items-start'} mb-2`}
             >
               <div className="flex items-center mb-2">
@@ -97,7 +98,7 @@ export const ChatSection: FC = () => {
               <div
                 className={`${message.senderUsername === user?.username ? 'bg-blue-500' : 'dark:bg-gray-700'}  dark:text-white rounded-lg p-2 shadow mb-2 max-w-sm`}
               >
-                {message.message}
+                {message?.message}
               </div>
             </div>
           ))}

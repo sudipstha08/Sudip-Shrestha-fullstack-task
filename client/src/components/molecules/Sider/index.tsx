@@ -6,14 +6,15 @@ import { useNavigate } from 'react-router-dom'
 import { useSnapshot } from 'valtio'
 
 const picSources = [
-  'https://picsum.photos/200',
+  'https://picsum.photos/200/300',
+  'https://randomuser.me/api/portraits/women/1.jpg',
   'https://randomuser.me/api/portraits/women/2.jpg',
-  'https://randomuser.me/api/portraits/women/4.jpg',
-  'https://randomuser.me/api/portraits/man/4.jpg',
+  'https://randomuser.me/api/portraits/men/75.jpg',
+  'https://picsum.photos/200',
 ]
 
 function generateRandomNumber() {
-  return Math.floor(Math.random() * 5) + 1
+  return Math.floor(Math.random() * 4) + 1
 }
 
 export const Sider: FC = () => {
