@@ -4,6 +4,7 @@ import { useSnapshot } from 'valtio'
 import { createCtx } from './createCtx'
 import { authStore } from '../authStore'
 import { SOCKET_EVENT } from '@/constants'
+import { config } from '@/utils'
 
 interface SocketContext {
   socket: Socket | null
@@ -37,7 +38,7 @@ export const SocketContextProvider = ({ children }: Props) => {
       newSocket!.io.opts.transports = ['polling', 'websocket']
     }
 
-    newSocket = connect(`http://localhost:9000`!, {
+    newSocket = connect(config.API_URL!, {
       transports: ['websocket', 'polling'],
       autoConnect: true,
       // extraHeaders: {

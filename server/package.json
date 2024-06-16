@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start-dev": "ts-node-dev --no-notify --respawn  --transpile-only --exit-child --clear ./src/server.ts",
-    "start": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "start": "ts-node --transpile-only ./src/server.ts",
     "migrate-dev": "prisma migrate dev",
     "lint-staged": "lint-staged",
     "format": "eslint -c .eslintrc.js --ignore-path .eslintignore --fix",

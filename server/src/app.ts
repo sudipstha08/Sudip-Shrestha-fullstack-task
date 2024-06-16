@@ -8,6 +8,7 @@ import { CustomError } from './interfaces'
 import { Routes } from './routes'
 import { ApiMethods, RequestLog } from './middlewares'
 import { SocketRoutes } from './routes/socketRoutes'
+import { config } from './infrastructure'
 
 export class App {
   private app: Application
@@ -77,7 +78,7 @@ export class App {
   private initSocket() {
     const httpServer = createServer(this.app)
     this.server = new Server(httpServer, this.serverOptions)
-    httpServer.listen(9000, () => {
+    httpServer.listen(config.port, () => {
       console.log('Started =====>')
     })
   }
@@ -88,18 +89,4 @@ export class App {
       this.socketRoutes.onConnection.bind(this.socketRoutes),
     )
   }
-  // public start(port: number | string) {
-  //   const PORT = parseInt(port as string)
-  //   this.httpServer.listen(PORT, () => {
-  //     console.log('<----------------------------------------->')
-  //     // eslint-disable-next-line security-node/detect-crlf
-  //     console.log(`🏃🏃🏃 Server is running on PORT ${port} 🏃🏃🏃`)
-  //     console.log('<----------------------------------------->')
-  //   })
-
-  //   this.server.on(
-  //     'connection',
-  //     this.socketRoutes.onConnection.bind(this.socketRoutes),
-  //   )
-  // }
 }

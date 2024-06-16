@@ -13,7 +13,6 @@ export const PublicRoute = (PublicComponent: ComponentType) => {
       if (loggedIn) {
         navigate('/')
       } else {
-        navigate('/login')
         authStore.setLogout()
       }
     }, [loggedIn, navigate])
