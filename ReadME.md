@@ -10,6 +10,6 @@ Simple chat app with user auth and web sockets
 | `prisma`  | ORM              | [Prisma](https://www.prisma.io/) |
 
 ## How to get started ?
-- Run `docker-compse up --build`
+- Run `docker-compose up --build`
 - Access frontend on `http://localhost:3000`
 - Access API server on `http://localhost:5001`
